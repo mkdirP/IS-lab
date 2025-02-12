@@ -1,0 +1,23 @@
+{
+  "id": "4609730",
+  "name": "计算机毕业设计",
+  "font_family": "element-icons",
+  "css_prefix_text": "el-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "12875291",
+      "name": "数据分析",
+      "font_class": "shujufenxi",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "1766482",
+      "name": "符号-富文本",
+      "font_class": "fuwenben",
+      "unicode": "e694",
+      "unicode_decimal": 59028
+    }
+  ]
+}

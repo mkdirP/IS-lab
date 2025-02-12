@@ -1,0 +1,27 @@
+import Cookies from "js-cookie";
+
+const TokenKey = "vue_admin";
+
+export function getToken() {
+  return Cookies.get(TokenKey);
+}
+
+export function setToken(token) {
+  return Cookies.set(TokenKey, token);
+}
+
+export function removeToken() {
+  return Cookies.remove(TokenKey);
+}
+
+export function getCurrentWarehouseId() {
+  return Cookies.get("CurrentWarehouseId");
+}
+
+export function setCurrentWarehouseId(CurrentWarehouseId) {
+  return Cookies.set("CurrentWarehouseId", CurrentWarehouseId);
+}
+
+export function removeCurrentWarehouseId() {
+  return Cookies.remove("CurrentWarehouseId");
+}
