@@ -88,7 +88,7 @@ public class AppUserDto extends BaseDto
     private String HairColor;
 
     /**
-     * 体重
+     * 身高
      */
     @JsonProperty("Height")
     private String Height;
@@ -102,6 +102,7 @@ public class AppUserDto extends BaseDto
     @JsonProperty("Location")
     private String Location;
 
+
     /**
      * 把用户传输模型转换成用户实体
      */
@@ -110,13 +111,6 @@ public class AppUserDto extends BaseDto
         BeanUtils.copyProperties(AppUser,this);
         return AppUser;
     }
-//    private String salt;
-//    public String getSalt() {
-//        return salt;
-//    }
-//
-//    public void setSalt(String salt) {
-//        this.salt = salt;
-//    }
-
 }
+
+

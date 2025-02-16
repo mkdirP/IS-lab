@@ -26,4 +26,3 @@ mybatis-plus: #操作数据库的ORM框架 mybatis
     map-underscore-to-camel-case: false         #是否转换成大小写
   type-aliases-package: com.example.web.entity  #实体存储的包位置
 
-

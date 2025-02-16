@@ -1,7 +1,9 @@
 package com.example.web.controller;
 
+import com.example.web.R;
 import com.example.web.dto.AppUserDto;
 import com.example.web.dto.query.AppUserPagedInput;
+import com.example.web.entity.AppUser;
 import com.example.web.service.AppUserService;
 import com.example.web.tools.BaseContext;
 import com.example.web.tools.dto.IdInput;
@@ -16,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -113,7 +117,8 @@ public class AppUserController {
         return AppUserService.Register(input);
 
     }
-  /**
+
+    /**
      * 找回密码
      */
     @RequestMapping(value = "/ForgetPassword", method = RequestMethod.POST)
@@ -132,6 +137,26 @@ public class AppUserController {
     public ResponseEntity<Double> calculateAverageHeight() {
         double avgHeight = AppUserService.calculateAverageHeight();
         return ResponseEntity.ok(avgHeight);
+    }
+
+    // 新增接口：按高度删除用户
+    @PostMapping("/DeleteByHeight")
+    public R deleteByHeight(@RequestBody Map<String, Integer> params) {
+        AppUserService.deleteUserByHeight(params.get("height"));
+        return R.success();
+    }
+
+    // 新增接口：统计头发颜色
+    @GetMapping("/count/hair")
+    public ResponseEntity<Integer> countUsersByHairColor(@RequestParam String hairColor) {
+        int count = AppUserService.countUsersByHairColor(hairColor);
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/count/eye")
+    public ResponseEntity<Integer> countUsersByEyeColor(@RequestParam String eyeColor) {
+        int count = AppUserService.countUsersByEyeColor(eyeColor);
+        return ResponseEntity.ok(count);
     }
 
 }

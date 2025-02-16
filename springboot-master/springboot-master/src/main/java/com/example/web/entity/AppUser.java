@@ -83,7 +83,6 @@ public class AppUser extends  BaseEntity {
     @TableField(value="Location",updateStrategy = FieldStrategy.IGNORED)
     private String Location;
 
-
     /**
      * 把用户实体转换成用户传输模型
      */

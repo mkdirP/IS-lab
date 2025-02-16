@@ -1,15 +1,19 @@
 package com.example.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.web.PendingAdminRequest;
 import com.example.web.SysConst;
 import com.example.web.dto.AppUserDto;
 import com.example.web.dto.query.AppUserPagedInput;
 import com.example.web.entity.AppUser;
+import com.example.web.enums.RoleTypeEnum;
 import com.example.web.mapper.AppUserMapper;
+import com.example.web.mapper.PendingAdminRequestMapper;
 import com.example.web.service.AppUserService;
 import com.example.web.tools.Extension;
 import com.example.web.tools.JWTUtils;
@@ -31,7 +35,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  * 用户功能实现类
@@ -39,12 +45,54 @@ import java.util.Map;
 @Service
 public class AppUserServiceImpl extends ServiceImpl<AppUserMapper, AppUser> implements AppUserService {
 
-
     /**
      * 操作数据库的用户表mapper对象
      */
     @Autowired
     private AppUserMapper  AppUserMpper;
+    @Autowired
+    private PendingAdminRequestMapper pendingAdminRequestMapper;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    public void deleteUserByHeight(int height) {
+        QueryWrapper<AppUser> wrapper = new QueryWrapper<>();
+        // 转换为字符串比较
+        wrapper.eq("height", String.valueOf(height));
+        this.remove(wrapper);
+    }
+
+//    public void deleteUserByHeight(int height) {
+//        entityManager.createNativeQuery("SELECT delete_user_by_height(:height)")
+//                .setParameter("height", height)
+//                .executeUpdate();
+//    }
+
+    public Double getAverageHeight() {
+        return (Double) entityManager.createNativeQuery("SELECT get_average_height()")
+                .getSingleResult();
+    }
+
+    public List<AppUser> getUsersByNameSubstring(String nameSubstring) {
+        return entityManager.createNativeQuery("SELECT * FROM get_users_by_name_substring(:nameSubstring)", AppUser.class)
+                .setParameter("nameSubstring", nameSubstring)
+                .getResultList();
+    }
+
+    public int countUsersByHairColor(String hairColor) {
+        return (int) entityManager.createNativeQuery("SELECT count_users_by_hair_color(:hairColor)")
+                .setParameter("hairColor", hairColor)
+                .getSingleResult();
+    }
+
+    public int countUsersByEyeColor(String eyeColor) {
+        return (int) entityManager.createNativeQuery("SELECT count_users_by_eye_color(:eyeColor)")
+                .setParameter("eyeColor", eyeColor)
+                .getSingleResult();
+    }
+
     /**
      * 操作数据库的WarehouseRelativeUser表mapper对象
      */
@@ -203,9 +251,9 @@ public class AppUserServiceImpl extends ServiceImpl<AppUserMapper, AppUser> impl
     /**
      * 注册
      */
+
     @Override
     public AppUserDto Register(AppUserDto input) {
-
 
         //检查用户名是否存在
         Long userCount = AppUserMpper.selectCount(Wrappers.<AppUser>lambdaQuery()
@@ -215,7 +263,7 @@ public class AppUserServiceImpl extends ServiceImpl<AppUserMapper, AppUser> impl
         }
         //检查邮箱是否存在
         Long emailCount = AppUserMpper.selectCount(Wrappers.<AppUser>lambdaQuery()
-                .eq(Extension.isNotNullOrEmpty(input.getUserName()), AppUser::getEmail, input.getEmail()));
+                .eq(Extension.isNotNullOrEmpty(input.getEmail()), AppUser::getEmail, input.getEmail()));
         if (emailCount > 0) {
             throw new CustomException("This email already exists!");
         }
@@ -225,10 +273,29 @@ public class AppUserServiceImpl extends ServiceImpl<AppUserMapper, AppUser> impl
         if (phoneCount > 0) {
             throw new CustomException("Этот номер телефона уже существует!");
         }
-        String hashedPassword = BCrypt.hashpw(input.getPassword(), BCrypt.gensalt());
-        input.setPassword(hashedPassword);
-        return CreateOrEdit(input);
+
+        if (input.getRoleType() == RoleTypeEnum.admin.index()) {
+            // 将申请成为管理员的用户存入待审核表
+            PendingAdminRequest request = new PendingAdminRequest();
+            request.setUsername(input.getUserName());
+            request.setPassword(input.getPassword());
+            request.setEmail(input.getEmail());
+            request.setPhonenumber(input.getPhoneNumber());
+            request.setRoletype(input.getRoleType());
+
+            // 插入待审核表
+            pendingAdminRequestMapper.insert(request);
+
+            // 返回待审核的用户信息
+            return input;
+        }
+            String hashedPassword = BCrypt.hashpw(input.getPassword(), BCrypt.gensalt());
+            input.setPassword(hashedPassword);
+            return CreateOrEdit(input);
+
     }
+
+
    /**
      * 找回密码
      */
@@ -349,4 +416,6 @@ public class AppUserServiceImpl extends ServiceImpl<AppUserMapper, AppUser> impl
             Double avgHeight = appUserMapper.calculateAverageHeight();
             return avgHeight != null ? avgHeight : 0.0;  // 避免数据库返回 NULL
         }
-    }
+
+
+}

@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 用户功能的Service接口的定义清单
@@ -53,6 +54,7 @@ public interface AppUserService extends IService<AppUser> {
      */
     public AppUserDto Register(AppUserDto input);
 
+
     /**
      * 找回密码
      */
@@ -64,5 +66,31 @@ public interface AppUserService extends IService<AppUser> {
     public void Export(@RequestParam String query, HttpServletResponse response) throws IOException;
 
     public double calculateAverageHeight();
+
+
+    /**
+     * 根据高度删除用户
+     */
+    void deleteUserByHeight(int height);
+
+    /**
+     * 获取所有用户的平均身高
+     */
+    Double getAverageHeight();
+
+    /**
+     * 通过名字的子字符串获取用户列表
+     */
+    List<AppUser> getUsersByNameSubstring(String nameSubstring);
+
+    /**
+     * 统计指定头发颜色的用户数
+     */
+    int countUsersByHairColor(String hairColor);
+
+    /**
+     * 统计指定眼睛颜色的用户数
+     */
+    int countUsersByEyeColor(String eyeColor);
 
 }

@@ -12,4 +12,5 @@ public interface AppUserMapper extends BaseMapper<AppUser> {
 
     @Select("SELECT AVG(CAST(height AS DECIMAL(10,2))) FROM appuser")
     Double calculateAverageHeight();
+
 }

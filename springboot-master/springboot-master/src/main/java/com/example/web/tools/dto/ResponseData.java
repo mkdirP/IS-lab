@@ -13,6 +13,9 @@ public class ResponseData<T> {
 
     public Boolean Success;
 
+    public ResponseData() {
+    }
+
     /**
      *得到一个响应的实例
      * @return

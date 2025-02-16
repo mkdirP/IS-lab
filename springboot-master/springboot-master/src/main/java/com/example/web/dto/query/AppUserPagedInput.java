@@ -1,6 +1,7 @@
 package com.example.web.dto.query;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.example.web.dto.AppUserDto;
 import com.example.web.tools.dto.PagedInput;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -57,4 +58,6 @@ public class AppUserPagedInput  extends PagedInput {
 
     @JsonProperty("Location")
     private String Location;
+
+
 }
