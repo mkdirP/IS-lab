@@ -65,11 +65,11 @@ public class AppUser extends  BaseEntity {
 
     @JsonProperty("EyeColor")
     @TableField(value="EyeColor",updateStrategy = FieldStrategy.IGNORED)
-    private String EyeColor;
+    private String EyeColor = "Unknown";
 
     @JsonProperty("HairColor")
     @TableField(value="HairColor",updateStrategy = FieldStrategy.IGNORED)
-    private String HairColor;
+    private String HairColor = "Unknown" ;
 
     @JsonProperty("Height")
     @TableField(value="Height",updateStrategy = FieldStrategy.IGNORED)

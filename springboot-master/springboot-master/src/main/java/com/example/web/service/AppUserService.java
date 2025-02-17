@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户功能的Service接口的定义清单
@@ -93,4 +94,7 @@ public interface AppUserService extends IService<AppUser> {
      */
     int countUsersByEyeColor(String eyeColor);
 
+    Map<String, Long> countHairColor();
+
+    Map<String, Long> countEyeColor();
 }

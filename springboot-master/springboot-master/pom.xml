@@ -50,6 +50,11 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -83,6 +88,13 @@
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.3.4</version>
+        </dependency>
+
 
         <!--springboot整合mybatis依赖-->
         <dependency>

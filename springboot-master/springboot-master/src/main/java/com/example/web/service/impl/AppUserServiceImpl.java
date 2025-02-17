@@ -29,6 +29,7 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.io.IOException;
@@ -81,11 +82,13 @@ public class AppUserServiceImpl extends ServiceImpl<AppUserMapper, AppUser> impl
                 .getResultList();
     }
 
+    @Transactional
     public int countUsersByHairColor(String hairColor) {
         return (int) entityManager.createNativeQuery("SELECT count_users_by_hair_color(:hairColor)")
                 .setParameter("hairColor", hairColor)
                 .getSingleResult();
     }
+
 
     public int countUsersByEyeColor(String eyeColor) {
         return (int) entityManager.createNativeQuery("SELECT count_users_by_eye_color(:eyeColor)")
@@ -417,5 +420,33 @@ public class AppUserServiceImpl extends ServiceImpl<AppUserMapper, AppUser> impl
             return avgHeight != null ? avgHeight : 0.0;  // 避免数据库返回 NULL
         }
 
+    // 获取 hairColor 的统计数量
+    public Map<String, Long> countHairColor() {
+        List<Map<String, Object>> result = appUserMapper.countHairColor();
+        Map<String, Long> statistics = new HashMap<>();
+
+        // 将查询结果转换成 Map
+        for (Map<String, Object> row : result) {
+            String color = (String) row.get("color");
+            Long count = ((Number) row.get("count")).longValue(); // 转换为 Long
+            statistics.put(color, count);
+        }
+
+        return statistics;
+    }
+
+    public Map<String, Long> countEyeColor() {
+        List<Map<String, Object>> result = appUserMapper.countEyeColor();
+        Map<String, Long> statistics = new HashMap<>();
+
+        // 将查询结果转换成 Map
+        for (Map<String, Object> row : result) {
+            String color = (String) row.get("color");
+            Long count = ((Number) row.get("count")).longValue(); // 转换为 Long
+            statistics.put(color, count);
+        }
+
+        return statistics;
+    }
 
 }

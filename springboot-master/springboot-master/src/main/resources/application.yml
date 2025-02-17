@@ -10,6 +10,11 @@ spring:
     username: postgres
     password: s336262
 
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5433/s336179
+#    username: s336179
+#    password: MsTFJKU3Kuh3emV9
+
   jackson: # json序列号配置
     property-naming-strategy: UPPER_CAMEL_CASE #设置大写开头的命名风格
     date-format: yyyy-MM-dd HH:mm:ss #设置标准的时间格式
@@ -26,3 +31,20 @@ mybatis-plus: #操作数据库的ORM框架 mybatis
     map-underscore-to-camel-case: false         #是否转换成大小写
   type-aliases-package: com.example.web.entity  #实体存储的包位置
 
+  jpa:
+    hibernate:
+      ddl-auto: update  # Hibernate 自动管理数据库架构（开发阶段使用）
+    show-sql: true  # 输出 SQL 查询日志
+    properties:
+      hibernate:
+        format_sql: true  # 格式化 SQL 查询
+    transaction:
+      enabled: true  # 启用事务管理
+
+      # minio 文件存储配置信息
+minio:
+  endpoint: http://127.0.0.1:9000
+  url: http://localhost:9000
+  accessKey: cD4GnOxBIg0NZJIoK2tM
+  secretKey: tBsUYy6G7sXLaEVyQbP9JVkndft8GrKP2J49FJij
+  bucketName: is-lab
