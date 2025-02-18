@@ -1,4 +1,4 @@
-package com.example.web;
+package com.example.web.service;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -11,14 +11,14 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 @Service
-public class TransactionalFileService {
+public class MinIOService {
 
     private final MinioClient minioClient;
     private final JdbcTemplate jdbcTemplate;
     private final String bucketName = "is-lab";
 
     @Autowired
-    public TransactionalFileService(MinioClient minioClient, JdbcTemplate jdbcTemplate) {
+    public MinIOService(MinioClient minioClient, JdbcTemplate jdbcTemplate) {
         this.minioClient = minioClient;
         this.jdbcTemplate = jdbcTemplate;
     }

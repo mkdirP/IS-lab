@@ -1,5 +1,6 @@
 package com.example.web;
 
+import com.example.web.service.MinIOService;
 import io.minio.MinioClient;
 import io.minio.BucketExistsArgs;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,13 +10,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileUploadRunner implements CommandLineRunner {
 
-    private final TransactionalFileService fileService;
+    private final MinIOService minIOService;
     private final MinioClient minioClient;
     private final String bucketName;
 
     // 注入依赖
-    public FileUploadRunner(TransactionalFileService fileService, MinioClient minioClient, @Value("${minio.bucket-name}") String bucketName) {
-        this.fileService = fileService;
+    public FileUploadRunner(MinIOService minIOService, MinioClient minioClient, @Value("${minio.bucket-name}") String bucketName) {
+        this.minIOService = minIOService;
         this.minioClient = minioClient;
         this.bucketName = bucketName;
     }
@@ -39,6 +40,6 @@ public class FileUploadRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         checkMinioConnection();
-        fileService.uploadFileWithTransaction("C:\\Users\\MkdirP\\Desktop\\1.txt", "uploaded/test.txt");
+        minIOService.uploadFileWithTransaction("C:\\Users\\MkdirP\\Desktop\\1.txt", "uploaded/test.txt");
     }
 }
